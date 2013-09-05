@@ -1,3 +1,15 @@
+0.1.0: September 3, 2013
+* Replaced all console.error calls with emit('error').
+  *Warning*: you really must listen for these or node will throw uncatchable exceptions!
+* Bugfix: chunk count calculation was ignoring the header-overhead.
+* All log operations now use a single udp socket.
+* To be more friendly to lower MTUs, lowered the default buffer size to 1400 bytes.
+* Added destroy() function that closes the UDP socket.
+* Removed async requirement.
+* Removed some unused variables.
+* Removed the larger test files (256 and 512KB) because they don't fit the new default buffer limit.
+* Removed unused test data.
+
 0.0.12: March 12, 2012
 * Dummy version bump in order to push to npm
 

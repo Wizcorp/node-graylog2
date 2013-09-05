@@ -1,27 +1,24 @@
 {
     "name": "graylog2",
     "description": "Graylog2 client library for node.js",
-    "homepage" : "http://egorfine.github.com/node-graylog",
-    "bugs" : {
-        "url" : "http://github.com/stelcheck/node-graylog2/issues"
+    "homepage": "http://egorfine.github.com/node-graylog",
+    "bugs": {
+        "url": "http://github.com/Wizcorp/node-graylog2/issues"
     },
-    "version": "0.0.2",
+    "version": "0.1.0",
     "author": "Marc Trudel-Belise",
     "engines": {
-      "node": ">=0.6.11"
-    },
-    "dependencies": {
-        "async": "0.1.22"
+        "node": ">=0.6.11"
     },
     "devDependencies": {
         "jshint": "0.9.1"
     },
     "repository": {
         "type": "git",
-        "url": "http://github.com/stelcheck/node-graylog2.git"
+        "url": "http://github.com/Wizcorp/node-graylog2.git"
     },
     "scripts": {
         "test": "node ./test"
     },
-    "main" : "./graylog.js"
+    "main": "./graylog.js"
 }

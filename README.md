@@ -7,7 +7,8 @@ with the old one, except for configuration and the GLOBAL function setup
 (some optional arguments in logging calls are not supported; they will be
 logged as additional data).
 
-** New: ** Chunked GELF is now supported.
+** New: ** Chunked [GELF](https://github.com/Graylog2/graylog2-docs/wiki/GELF)
+is now supported.
 
 ## Synopsis
 
@@ -23,53 +24,62 @@ logged as additional data).
 * graylog.debug
 
 ### Code snippets
+
 ```javascript
-    graylog2 = require("graylog2");
-    logger = new graylog2.graylog({
-        servers : [
-            { 'host': 127.0.0.1, port: 12201 },
-            { 'host': 127.0.0.2, port: 12201 }
-        ],
-        hostname : 'server.name', // (optional)
-        facility : 'Node.js' // (optional)
-    });
+var graylog2 = require("graylog2");
+var logger = new graylog2.graylog({
+    servers: [
+        { 'host': 127.0.0.1, port: 12201 },
+        { 'host': 127.0.0.2, port: 12201 }
+    ],
+    hostname: 'server.name', // the name of this host
+                             // (optional, default: os.hostname())
+    facility: 'Node.js',     // the facility for these log messages
+                             // (optional, default: "Node.js")
+    bufferSize: 1350         // max UDP packet size, should never exceed the
+                             // MTU of your system (optional, default: 1400)
+});
+
+logger.on('error', function (error) {
+    console.error('Error while trying to write to graylog2:', error);
+});
 ```
 
 Short message:
 
 ```javascript
-    logger.log("What we've got here is...failure to communicate");
+logger.log("What we've got here is...failure to communicate");
 ```
 
 Long message:
 
 ```javascript
-    logger.log("What we've got here is...failure to communicate", "Some men you just
-        can't reach. So you get what we had here last week, which is the way he wants
-        it... well, he gets it. I don't like it any more than you men.");
+logger.log("What we've got here is...failure to communicate", "Some men you just
+    can't reach. So you get what we had here last week, which is the way he wants
+    it... well, he gets it. I don't like it any more than you men.");
 ```
 
 Short with additional data:
 
 ```javascript
-    logger.log("What we've got here is...failure to communicate", { cool: 'beans' });
+logger.log("What we've got here is...failure to communicate", { cool: 'beans' });
 ```
 
 Long with additional data:
 
 ```javascript
-    logger.log("What we've got here is...failure to communicate", "Some men you just
-        can't reach. So you get what we had here last week, which is the way he wants
-        it... well, he gets it. I don't like it any more than you men.",
-        {
-            cool: "beans"
-        }
-    );
+logger.log("What we've got here is...failure to communicate", "Some men you just
+    can't reach. So you get what we had here last week, which is the way he wants
+    it... well, he gets it. I don't like it any more than you men.",
+    {
+        cool: "beans"
+    }
+);
 ```
 
 ## Example
 
-See <code>test.js</code>.
+See `test.js`.
 
 ## What is graylog2 after all?
 
