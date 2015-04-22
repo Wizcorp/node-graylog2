@@ -1,7 +1,7 @@
-var zlib         = require('zlib'),
-    crypto       = require('crypto'),
-    dgram        = require('dgram'),
-    util         = require('util'),
+var zlib = require('zlib'),
+    crypto = require('crypto'),
+    dgram = require('dgram'),
+    util = require('util'),
     EventEmitter = require('events').EventEmitter;
 
 /**
@@ -12,21 +12,21 @@ var zlib         = require('zlib'),
 var graylog = function graylog(config) {
     EventEmitter.call(this);
 
-    this.config       = config;
+    this.config = config;
 
-    this.servers      = config.servers;
-    this.client       = null;
-    this.hostname     = config.hostname || require('os').hostname();
-    this.facility     = config.facility || 'Node.js';
+    this.servers = config.servers;
+    this.client = null;
+    this.hostname = config.hostname || require('os').hostname();
+    this.facility = config.facility || 'Node.js';
 
     this._unsentMessages = 0;
     this._unsentChunks = 0;
-    this._callCount   = 0;
+    this._callCount = 0;
 
     this._onClose = null;
     this._isDestroyed = false;
 
-    this._bufferSize  = config.bufferSize || this.DEFAULT_BUFFERSIZE;
+    this._bufferSize = config.bufferSize || this.DEFAULT_BUFFERSIZE;
 };
 
 util.inherits(graylog, EventEmitter);
@@ -34,15 +34,15 @@ util.inherits(graylog, EventEmitter);
 graylog.prototype.DEFAULT_BUFFERSIZE = 1400;  // a bit less than a typical MTU of 1500 to be on the safe side
 
 graylog.prototype.level = {
-    EMERG: 0,    // system is unusable
-    ALERT: 1,    // action must be taken immediately
-    CRIT: 2,     // critical conditions
-    ERR: 3,      // error conditions
-    ERROR: 3,    // because people WILL typo
-    WARNING: 4,  // warning conditions
-    NOTICE: 5,   // normal, but significant, condition
-    INFO: 6,     // informational message
-    DEBUG: 7     // debug level message
+    EMERG: 0, // system is unusable
+    ALERT: 1, // action must be taken immediately
+    CRIT: 2, // critical conditions
+    ERR: 3, // error conditions
+    ERROR: 3, // because people WILL typo
+    WARNING: 4, // warning conditions
+    NOTICE: 5, // normal, but significant, condition
+    INFO: 6, // informational message
+    DEBUG: 7 // debug level message
 };
 
 graylog.prototype.getServer = function () {
@@ -111,31 +111,31 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 
     var payload,
         fileinfo,
-        that    = this,
-        field   = '',
+        that = this,
+        field = '',
         message = {
-            version    : '1.0',
-            timestamp  : (timestamp || new Date()).getTime() / 1000,
-            host       : this.hostname,
-            facility   : this.facility,
-            level      : level
+            version : '1.0',
+            timestamp : (timestamp || new Date()).getTime() / 1000,
+            host : this.hostname,
+            facility : this.facility,
+            level : level
         };
 
     if (typeof(short_message) !== 'object' && typeof(full_message) === 'object' && additionalFields === undefined) {
         // Only short message and additional fields are available
-        message.short_message   = short_message;
-        message.full_message    = short_message;
+        message.short_message = short_message;
+        message.full_message = short_message;
 
         additionalFields = full_message;
-    } else  if (typeof(short_message) !== 'object') {
+    } else if (typeof(short_message) !== 'object') {
         // We normally set the data
-        message.short_message   = short_message;
-        message.full_message    = full_message || short_message;
+        message.short_message = short_message;
+        message.full_message = full_message || short_message;
     } else if (short_message.stack && short_message.message) {
 
         // Short message is an Error message, we process accordingly
         message.short_message = short_message.message;
-        message.full_message  = short_message.stack;
+        message.full_message = short_message.stack;
 
         // extract error file and line
         fileinfo = message.stack.split('\n')[0];
@@ -179,7 +179,7 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
         // It didn't fit, so prepare for a chunked stream
 
         var bufferSize = that._bufferSize;
-        var dataSize   = bufferSize - 12;  // the data part of the buffer is the buffer size - header size
+        var dataSize = bufferSize - 12;  // the data part of the buffer is the buffer size - header size
         var chunkCount = Math.ceil(buffer.length / dataSize);
 
         if (chunkCount > 128) {
@@ -223,7 +223,7 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 
                 // Copy data from full buffer into the chunk
                 var start = chunkSequenceNumber * dataSize;
-                var stop  = Math.min((chunkSequenceNumber + 1) * dataSize, buffer.length);
+                var stop = Math.min((chunkSequenceNumber + 1) * dataSize, buffer.length);
 
                 buffer.copy(chunk, 12, start, stop);
 

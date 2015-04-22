@@ -1,5 +1,5 @@
 var graylog = require('./graylog'),
-    fs      = require('fs'),
+    fs = require('fs'),
     file,
     data,
     servers = [
