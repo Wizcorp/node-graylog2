@@ -1,24 +1,31 @@
 {
-    "name": "graylog2",
-    "description": "Graylog2 client library for node.js",
-    "homepage": "http://github.com/Wizcorp/node-graylog2",
-    "bugs": {
-        "url": "http://github.com/Wizcorp/node-graylog2/issues"
-    },
-    "version": "0.1.3",
-    "author": "Marc Trudel-Belise",
-    "engines": {
-        "node": ">=0.6.11"
-    },
-    "devDependencies": {
-        "jshint": "0.9.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/Wizcorp/node-graylog2.git"
-    },
-    "scripts": {
-        "test": "node ./test"
-    },
-    "main": "./graylog.js"
+  "name": "graylog2",
+  "description": "Graylog2 client library for node.js",
+  "version": "0.1.3",
+  "author": "Marc Trudel-Belise",
+  "bugs": {
+    "url": "http://github.com/Wizcorp/node-graylog2/issues"
+  },
+  "contributors": [
+    {
+      "name": "Egor Egorov",
+      "email": "me@egorfine.com"
+    }
+  ],
+  "devDependencies": {
+    "jshint": "0.9.1"
+  },
+  "engines": {
+    "node": ">=0.6.11"
+  },
+  "homepage": "http://github.com/Wizcorp/node-graylog2",
+  "license": "MIT",
+  "main": "./graylog.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Wizcorp/node-graylog2.git"
+  },
+  "scripts": {
+    "test": "node ./test"
+  }
 }

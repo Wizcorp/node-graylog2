@@ -78,13 +78,7 @@ logger.log("What we've got here is...failure to communicate", "Some men you just
 );
 ```
 
-Flush all log messages and close down:
-```javascript
-logger.close(function(){
-    console.log('All done - cookie now?');
-    process.exit();
-});
-```
+The connection will be closed automatically at the end of your program.
 
 ## Example
 
@@ -97,12 +91,3 @@ It's a miracle. Get it at http://www.graylog2.org/
 ## Installation
 
     npm install graylog2
-
-## License
-
-See LICENSE file. Basically, it's a kind of "do-whatever-you-want-for-free" license.
-
-## Original author
-
-Egor Egorov <me@egorfine.com>
-
