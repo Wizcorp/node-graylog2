@@ -15,18 +15,24 @@ var graylog = function graylog(config) {
     this.config = config;
 
     this.servers = config.servers;
-    this.client = null;
     this.hostname = config.hostname || require('os').hostname();
     this.facility = config.facility || 'Node.js';
 
-    this._unsentMessages = 0;
-    this._unsentChunks = 0;
     this._callCount = 0;
 
-    this._onClose = null;
-    this._isDestroyed = false;
-
     this._bufferSize = config.bufferSize || this.DEFAULT_BUFFERSIZE;
+
+    this.client = dgram.createSocket("udp4");
+
+    // unref so we don't need to close it explicitly. since we aren't listening
+    // for messages, there's no need to keep it open
+    this.client.unref();
+
+    var that = this;
+    this.client.on('error', function (err) {
+        that.emit('error', err);
+    });
+
 };
 
 util.inherits(graylog, EventEmitter);
@@ -47,29 +53,6 @@ graylog.prototype.level = {
 
 graylog.prototype.getServer = function () {
     return this.servers[this._callCount++ % this.servers.length];
-};
-
-graylog.prototype.getClient = function () {
-    if (!this.client && !this._isDestroyed) {
-        this.client = dgram.createSocket("udp4");
-
-        var that = this;
-        this.client.on('error', function (err) {
-            that.emit('error', err);
-        });
-    }
-
-    return this.client;
-};
-
-graylog.prototype.destroy = function () {
-    if (this.client) {
-        this.client.close();
-        this.client.removeAllListeners();
-        this.client = null;
-        this._onClose = null;
-        this._isDestroyed = true;
-    }
 };
 
 graylog.prototype.emergency = function (short_message, full_message, additionalFields, timestamp) {
@@ -107,8 +90,6 @@ graylog.prototype.debug = function (short_message, full_message, additionalField
 };
 
 graylog.prototype._log = function log(short_message, full_message, additionalFields, timestamp, level) {
-    this._unsentMessages += 1;
-
     var payload,
         fileinfo,
         that = this,
@@ -166,13 +147,11 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 
     zlib.deflate(payload, function (err, buffer) {
         if (err) {
-            that._unsentMessages -= 1;
             return that.emitError(err);
         }
 
         // If it all fits, just send it
         if (buffer.length <= that._bufferSize) {
-            that._unsentMessages -= 1;
             return that.send(buffer, that.getServer());
         }
 
@@ -183,14 +162,12 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
         var chunkCount = Math.ceil(buffer.length / dataSize);
 
         if (chunkCount > 128) {
-            that._unsentMessages -= 1;
             return that.emitError('Cannot log messages bigger than ' + (dataSize * 128) +  ' bytes');
         }
 
         // Generate a random id in buffer format
         crypto.randomBytes(8, function (err, id) {
             if (err) {
-                that._unsentMessages -= 1;
                 return that.emitError(err);
             }
 
@@ -213,8 +190,8 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 
             function send(err) {
                 if (err || chunkSequenceNumber >= chunkCount) {
-                    // We have reached the end, or had an error (which will already have been emitted)
-                    that._unsentMessages -= 1;
+                    // We have reached the end, or had an error (which will
+                    // already have been emitted)
                     return;
                 }
 
@@ -239,65 +216,19 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 };
 
 graylog.prototype.send = function (chunk, server, cb) {
-    var that = this,
-        client = this.getClient();
-
-    if (!client) {
-        var error = new Error('Socket was already destroyed');
-
-        this.emit('error', error);
-        return cb(error);
-    }
-
-    this._unsentChunks += 1;
-
-    client.send(chunk, 0, chunk.length, server.port, server.host, function (err) {
-        that._unsentChunks -= 1;
-
+    var that = this;
+    this.client.send(chunk, 0, chunk.length, server.port, server.host, function (err) {
         if (err) {
             that.emit('error', err);
         }
-
         if (cb) {
             cb(err);
-        }
-
-        if (that._unsentChunks === 0 && that._unsentMessages === 0 && that._onClose) {
-            that._onClose();
         }
     });
 };
 
 graylog.prototype.emitError = function (err) {
     this.emit('error', err);
-
-    if (this._unsentChunks === 0 && this._unsentMessages === 0 && this._onClose) {
-        this._onClose();
-    }
-};
-
-graylog.prototype.close = function (cb) {
-    var that = this;
-
-    if (this._onClose || this._isDestroyed) {
-        return process.nextTick(function () {
-            var error = new Error('Close was already called once');
-
-            if (cb) {
-                return cb(error);
-            }
-
-            that.emit('error', error);
-        });
-    }
-
-    this._onClose = function () {
-        that.destroy();
-
-        if (cb) {
-            cb();
-        }
-    };
 };
 
 exports.graylog = graylog;
