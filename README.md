@@ -79,13 +79,7 @@ logger.log("What we've got here is...failure to communicate", "Some men you just
 );
 ```
 
-Flush all log messages and close down:
-```javascript
-logger.close(function(){
-    console.log('All done - cookie now?');
-    process.exit();
-});
-```
+The connection will be closed automatically at the end of your program.
 
 ## Example
 
