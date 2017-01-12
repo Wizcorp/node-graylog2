@@ -19,7 +19,7 @@ function createClient() {
 
 var i = 0;
 var count = 20000;
-var small = 'h'.repeat(2500);
+var small = 'h'.repeat(1000);
 var big = 'h'.repeat(25000);
 var bigRandom = require('crypto').randomBytes(20000).toString('base64');
 
@@ -34,6 +34,14 @@ function log(str, label, i, n, cb) {
     if (i === n) {
 		client.close(function () {
 			console.timeEnd(label + ' x' + n);
+
+			console.log('Sent:', client.sent, '- Compressed:', client.compressed);
+			console.log('');
+
+			if (client.sent !== n) {
+				throw new Error('Should have sent: ' + n);
+			}
+
 			cb();
 	    });
 
