@@ -119,7 +119,7 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
         that    = this,
         field   = '',
         message = {
-            version    : '1.0',
+            version    : '1.1',
             timestamp  : (timestamp || new Date()).getTime() / 1000,
             host       : this.hostname,
             facility   : this.facility,
