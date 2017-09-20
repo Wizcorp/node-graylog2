@@ -142,15 +142,16 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
         message.short_message = short_message.message;
         message.full_message  = short_message.stack;
 
-        // extract error file and line
-        fileinfo = message.stack.split('\n')[0];
-        fileinfo = fileinfo.substr(fileinfo.indexOf('('), fileinfo.indeOf(')'));
+        additionalFields = full_message || additionalFields || {};
+
+        // extract error file, line and col
+        fileinfo = message.full_message.split('\n')[1];
+        fileinfo = fileinfo.slice(fileinfo.indexOf('(') + 1, -1);
         fileinfo = fileinfo.split(':');
 
-        message.file = fileinfo[0];
-        message.line = fileinfo[1];
-
-        additionalFields = full_message || additionalFields;
+        additionalFields.file = fileinfo[0];
+        additionalFields.line = fileinfo[1];
+        additionalFields.col = fileinfo[2];
     } else {
         message.full_message = message.short_message = JSON.stringify(short_message);
     }
