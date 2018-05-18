@@ -94,3 +94,33 @@ It's a miracle. Get it at http://www.graylog2.org/
 ## Installation
 
     npm install graylog2
+
+## Graylog2 Configuration
+
+This module will send its data as GELF packets to Graylog2. In order to see your data in the correct format you need to create a GELF Input in your Graylog2 application. 
+
+You can do this by following these instructions:
+
+1. Go to System -> Inputs
+
+<div align="center">
+    <img src="./imgs/graylog_config_1.png">
+</div>
+
+2. Select a GELF Input type. In this case we will be using GELF UDP as it doesn't need any additional configuration.
+
+<div align="center">
+    <img src="./imgs/graylog_config_2.png">
+</div>
+
+3. Select the Nodes that will read the new Input type.
+
+<div align="center">
+    <img src="./imgs/graylog_config_3.png">
+</div>
+
+4. Launch the new input!
+
+<div align="center">
+    <img src="./imgs/graylog_config_4.png">
+</div>
