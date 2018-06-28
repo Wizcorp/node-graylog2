@@ -1,4 +1,4 @@
-var Graylog = require('.').graylog;
+var Graylog = require('.');
 var client;
 var servers = [
     { host: '127.0.0.1', port: 12201 }
