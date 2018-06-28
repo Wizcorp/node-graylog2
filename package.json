@@ -17,7 +17,7 @@
     }
   ],
   "devDependencies": {
-    "jshint": "2.9.2"
+    "jshint": "^2.9.5"
   },
   "engines": {
     "node": ">=0.6.11"
