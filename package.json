@@ -21,9 +21,7 @@
     }
   ],
   "devDependencies": {
-    "jshint": "^2.9.4",
-    "nyc": "^10.0.0",
-    "tap-spec": "^4.1.1",
+    "tap-spec": "^5.0.0",
     "tape": "^4.6.3"
   },
   "engines": {
@@ -41,5 +39,9 @@
     "cover": "nyc tape ./test/*.js",
     "lint": "jshint ./lib",
     "bench": "node ./bench.js"
+  },
+  "dependencies": {
+    "jshint": "^2.9.5",
+    "nyc": "^12.0.2"
   }
 }
