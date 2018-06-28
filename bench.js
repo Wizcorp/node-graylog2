@@ -1,8 +1,8 @@
-var Graylog = require('./graylog').graylog;
+var Graylog = require('.').graylog;
 var fs = require('fs');
 var client;
 var servers = [
-    { 'host': '127.0.0.1', 'port': 12201 }
+    { host: '127.0.0.1', port: 12201 }
 ];
 
 function createClient() {
@@ -19,7 +19,7 @@ function createClient() {
 
 var i = 0;
 var count = 20000;
-var small = 'h'.repeat(2500);
+var small = 'h'.repeat(1000);
 var big = 'h'.repeat(25000);
 var bigRandom = require('crypto').randomBytes(20000).toString('base64');
 
@@ -27,17 +27,24 @@ console.log('');
 
 function log(str, label, i, n, cb) {
     if (i === 0) {
+        createClient();
         console.time(label + ' x' + n);
-		createClient();
+
+        client.on('drain', function () {
+            console.timeEnd(label + ' x' + n);
+
+            console.log('Sent:', client.sent, '- Compressed:', client.compressed);
+            console.log('');
+
+            if (client.sent !== n) {
+                throw new Error('Should have sent: ' + n);
+            }
+
+            cb();
+        });
     }
 
-    if (i === n) {
-		client.close(function () {
-			console.timeEnd(label + ' x' + n);
-			cb();
-	    });
-
-    } else {
+    if (i < n) {
         client.log('test', str);
         process.nextTick(log, str, label, i + 1, n, cb);
     }
@@ -56,9 +63,9 @@ function testBigAndRandom(cb) {
 }
 
 function end() {
+    console.log('Complete.');
+    console.log('Please check your logging service and verify that insertion was successful.');
     console.log('');
-    console.log('Insertion complete. Please check', 'http://' + servers[0].host + ':3000', 'and verify that insertion was successfull');
-	console.log('');
 }
 
 testSmall(function () {

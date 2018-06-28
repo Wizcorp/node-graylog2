@@ -8,6 +8,10 @@
   },
   "contributors": [
     {
+      "name": "Ron Korving",
+      "email": "rkorving@wizcorp.jp"
+    },
+    {
       "name": "Egor Egorov",
       "email": "me@egorfine.com"
     },
@@ -17,19 +21,25 @@
     }
   ],
   "devDependencies": {
-    "jshint": "^2.9.5"
+    "jshint": "^2.9.4",
+    "nyc": "^10.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
   },
   "engines": {
-    "node": ">=0.6.11"
+    "node": ">=5.7.0"
   },
   "homepage": "http://github.com/Wizcorp/node-graylog2",
   "license": "MIT",
-  "main": "./graylog.js",
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/Wizcorp/node-graylog2.git"
   },
   "scripts": {
-    "test": "node ./test"
+    "test": "tape ./test/*.js | tap-spec",
+    "cover": "nyc tape ./test/*.js",
+    "lint": "jshint ./lib",
+    "bench": "node ./bench.js"
   }
 }
