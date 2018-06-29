@@ -1,7 +1,7 @@
 {
   "name": "graylog2",
   "description": "Graylog2 client library for node.js",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Marc Trudel-Belise",
   "bugs": {
     "url": "http://github.com/Wizcorp/node-graylog2/issues"
@@ -21,11 +21,13 @@
     }
   ],
   "devDependencies": {
+    "jshint": "^2.9.5",
+    "nyc": "^12.0.2",
     "tap-spec": "^5.0.0",
     "tape": "^4.6.3"
   },
   "engines": {
-    "node": ">=5.7.0"
+    "node": ">=6.0.0"
   },
   "homepage": "http://github.com/Wizcorp/node-graylog2",
   "license": "MIT",
@@ -39,9 +41,5 @@
     "cover": "nyc tape ./test/*.js",
     "lint": "jshint ./lib",
     "bench": "node ./bench.js"
-  },
-  "dependencies": {
-    "jshint": "^2.9.5",
-    "nyc": "^12.0.2"
   }
 }
