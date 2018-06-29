@@ -1,3 +1,9 @@
+0.3.0: June 29, 2018
+* Updated README.md with graylog configuration
+* Fixed several vulnerability issues with dependencies
+* Fixed security issue with usage of Buffer
+* Fixed https://github.com/Wizcorp/node-graylog2/issues/16
+
 0.2.1: February 5, 2018
 * Fixed a typo in error file/line parsing.
 
