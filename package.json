@@ -1,7 +1,7 @@
 {
   "name": "graylog2",
   "description": "Graylog2 client library for node.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Marc Trudel-Belise",
   "bugs": {
     "url": "http://github.com/Wizcorp/node-graylog2/issues"
