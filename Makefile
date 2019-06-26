@@ -17,6 +17,9 @@ install:
 test:
 	npm test
 
+bench:
+	node ./bench.js
+
 # target: lint, Lints every JavaScript file in the project that are staged to be comitted.
 lint:
 	./scripts/lint-staged.sh

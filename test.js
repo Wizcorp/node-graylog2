@@ -77,7 +77,7 @@ try {
       facility: 'Test logger / Node.JS Test Script',
       deflate: 'not an option'
   });
-  throw new Error('should not get here')
+  throw new Error('should not get here');
 } catch (err) {
   assert(
     err.message === 'deflate must be one of "optimal", "always", or "never". was "not an option"',
