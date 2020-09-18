@@ -152,7 +152,11 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
 
         additionalFields = full_message || additionalFields;
     } else {
-        message.full_message = message.short_message = JSON.stringify(short_message);
+        try {
+            message.full_message = message.short_message = JSON.stringify(short_message)
+        } catch {
+            message.full_message = message.short_message
+        }
     }
 
     // We insert additional fields
