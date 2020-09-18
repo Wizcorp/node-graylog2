@@ -166,8 +166,13 @@ graylog.prototype._log = function log(short_message, full_message, additionalFie
         delete message._id;
     }
 
-    // Compression
-    payload = new Buffer(JSON.stringify(message));
+    payload = message;
+    try {
+        // Compression
+        payload = new Buffer(JSON.stringify(message));    
+    } catch { }
+    
+    
 
     function sendPayload(err, buffer) {
         if (err) {
